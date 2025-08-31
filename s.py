@@ -104,24 +104,23 @@ def cyber_boot_sequence():
     """
     for line in logo.split('\n'):
         console.print(f"[green]{line}[/]")
-        time.sleep(0.02)  # کاهش از 0.05 به 0.02
+        time.sleep(0.02)
 
     boot_steps = [
-        ("INITIALIZING KERNEL", 0.1),      # کاهش از 0.3
-        ("LOADING SECURITY MODULES", 0.08), # کاهش از 0.2
-        ("ESTABLISHING SECURE CHANNEL", 0.1), # کاهش از 0.3
-        ("CONFIGURING NETWORK PROTOCOLS", 0.08), # کاهش از 0.2
-        ("STARTING PROXY SERVICES", 0.1)   # کاهش از 0.3
+        ("INITIALIZING KERNEL", 0.1),
+        ("LOADING SECURITY MODULES", 0.08),
+        ("ESTABLISHING SECURE CHANNEL", 0.1),
+        ("CONFIGURING NETWORK PROTOCOLS", 0.08),
+        ("STARTING PROXY SERVICES", 0.1)
     ]
 
     with console.status("[bold green]BOOTING SYSTEM[/]", spinner="line") as status:
         for step, duration in boot_steps:
             status.update(f"[bold green]{step}[/]")
             
-            # کاهش تعداد خطوط سایبر از 3 به 1
             cyber_line = create_cyber_frame(width)
             console.print(f"[dim green]{cyber_line}[/]")
-            time.sleep(0.02)  # کاهش از 0.05
+            time.sleep(0.02)
             
             console.print(f"[bright_black]{hex(random.randint(0, 0xFFFFFFFF))}[/]")
             time.sleep(duration)
@@ -131,7 +130,7 @@ def cyber_boot_sequence():
     console.print(f"\n{'=' * width}")
     console.print(f"[bold green]{' ' * padding}{success_msg}[/]")
     console.print(f"{'=' * width}\n")
-    time.sleep(0.2)  # کاهش از 0.5
+    time.sleep(0.2)
 
 def create_header() -> Panel:
     header = Text()
@@ -148,17 +147,14 @@ def create_header() -> Panel:
 def create_main_menu() -> Panel:
     menu_text = Text()
     
-    # سرویس اول
     menu_text.append("\n[1] ", style="bright_black")
     menu_text.append("SEGFAULT", style="green")
     menu_text.append(" Proxy Server Manager", style="bright_black")
     
-    # سرویس دوم
     menu_text.append("\n[2] ", style="bright_black") 
     menu_text.append("MAGISK", style="green")
     menu_text.append(" Module Creator", style="bright_black")
     
-    # سرویس سوم
     menu_text.append("\n[3] ", style="bright_black")
     menu_text.append("HELP", style="green") 
     menu_text.append(" Module Format Guide", style="bright_black")
@@ -175,7 +171,6 @@ def create_menu() -> Panel:
     menu_text = Text()
     for i, (name, config) in enumerate([
         ("DEFAULT", "-D 8080"),
-        ("WARP", "-L8080:localhost:8080"),
         ("TOR", "-L8080:172.20.0.111:9050")
     ], 1):
         menu_text.append(f"\n[{i}] ", style="bright_black")
@@ -209,13 +204,12 @@ def connection_animation():
     ]
     
     with console.status("", spinner="line") as status:
-        for i in range(3):  # کاهش از 5 به 3
+        for i in range(3):
             pattern = patterns[i]
             status.update(f"[bold green]Establishing Connection Layer {i+1}[/]")
             
-            # کاهش تعداد خطوط انیمیشن
             console.print(f"[dim green]{pattern * (width // len(pattern) + 1)}[/]")
-            time.sleep(0.02)  # کاهش از 0.05
+            time.sleep(0.02)
             
             technical_info = [
                 f"Protocol: Layer{i+1}_SEC_{random.randint(1000, 9999)}",
@@ -224,11 +218,11 @@ def connection_animation():
                 f"Status: ACTIVE_{random.randbytes(4).hex().upper()}"
             ]
             console.print(f"[bright_black]{' | '.join(technical_info)}[/]")
-            time.sleep(0.1)  # کاهش از 0.2
+            time.sleep(0.1)
     
     console.print("\n[bold green]CONNECTION ESTABLISHED[/]")
     console.print(f"[bright_black]Session ID: {random.randbytes(8).hex().upper()}[/]\n")
-    time.sleep(0.2)  # کاهش از 0.5
+    time.sleep(0.2)
 
 def reconnection_animation(attempt):
     """انیمیشن اتصال مجدد"""
@@ -238,7 +232,7 @@ def reconnection_animation(attempt):
     
     reconnect_patterns = ["⟳", "⟲", "↻", "↺"]
     
-    for i in range(3):  # 3 دور انیمیشن کوتاه
+    for i in range(3):
         pattern = reconnect_patterns[i % len(reconnect_patterns)]
         console.print(f"[yellow]{pattern * (width // 10)} RECONNECTING... {pattern * (width // 10)}[/]")
         time.sleep(0.3)
@@ -341,15 +335,15 @@ def shutdown_sequence():
     
     console.print("[red]INITIATING SHUTDOWN SEQUENCE[/]")
     
-    for i in range(3, 0, -1):  # کاهش از 5 به 3
+    for i in range(3, 0, -1):
         console.print(f"[yellow]System shutdown in {i}...[/]")
         pattern = "▓▒░" * (width // 3)
         console.print(f"[dim red]{pattern}[/]")
-        time.sleep(0.2)  # کاهش از 0.3
+        time.sleep(0.2)
     
     clear()
     console.print("[bold red]SYSTEM OFFLINE[/]")
-    time.sleep(0.3)  # کاهش از 0.5
+    time.sleep(0.3)
 
 def check_connection():
     """بررسی وضعیت اتصال"""
@@ -369,56 +363,40 @@ def run_proxy(cmd):
     
     while True:
         try:
-            master, slave = pty.openpty()
-            cols, rows = os.get_terminal_size()
-            fcntl.ioctl(slave, termios.TIOCSWINSZ, 
-                       struct.pack("HHHH", rows, cols, 0, 0))
-            
             if reconnection_attempts == 0:
                 clear()
                 connection_animation()
             else:
                 reconnection_animation(reconnection_attempts)
             
+            # اجرای SSH با تعامل کامل
+            import subprocess
             process = subprocess.Popen(
-                f"ssh segfault {cmd}",
+                f"ssh -tt segfault {cmd}",
                 shell=True,
-                stdin=slave,
-                stdout=slave,
-                stderr=slave,
+                stdin=sys.stdin,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
                 preexec_fn=os.setsid
             )
-
-            os.close(slave)
-            connection_lost = False
             
-            while True:
+            try:
+                return_code = process.wait()
+            except KeyboardInterrupt:
+                console.print("\n[yellow]CONNECTION MANUALLY TERMINATED[/]")
                 try:
-                    r, w, e = select.select([master], [], [], 0.1)
-                    if master in r:
-                        data = os.read(master, 1024)
-                        if not data:
-                            connection_lost = True
-                            break
-                        sys.stdout.buffer.write(data)
-                        sys.stdout.buffer.flush()
-                    
-                    if process.poll() is not None:
-                        connection_lost = True
-                        break
-
-                except OSError:
-                    connection_lost = True
-                    break
-                except KeyboardInterrupt:
-                    console.print("\n[yellow]CONNECTION MANUALLY TERMINATED[/]")
-                    return
-
-            # اگر اتصال قطع شد و اتصال مجدد فعال است
-            if connection_lost and auto_reconnect and reconnection_attempts < max_reconnection_attempts:
+                    os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+                    process.wait(timeout=5)
+                except:
+                    try:
+                        os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+                    except:
+                        pass
+                return
+            
+            if return_code != 0 and auto_reconnect and reconnection_attempts < max_reconnection_attempts:
                 reconnection_attempts += 1
                 
-                # بررسی اتصال اینترنت
                 if not check_connection():
                     console.print("\n[red]No internet connection detected. Waiting for connection...[/]")
                     while not check_connection():
@@ -426,14 +404,14 @@ def run_proxy(cmd):
                     console.print("\n[green]Internet connection restored![/]")
                 
                 console.print(f"\n[yellow]Attempting reconnection {reconnection_attempts}/{max_reconnection_attempts}...[/]")
-                time.sleep(2)  # انتظار کوتاه قبل از اتصال مجدد
+                time.sleep(2)
                 continue
-            elif connection_lost and reconnection_attempts >= max_reconnection_attempts:
+            elif return_code != 0 and reconnection_attempts >= max_reconnection_attempts:
                 console.print(f"\n[red]Max reconnection attempts ({max_reconnection_attempts}) reached. Returning to menu.[/]")
                 break
             else:
                 break
-
+                
         except Exception as e:
             console.print(f"\n[red]ERROR: {str(e)}[/]")
             if auto_reconnect and reconnection_attempts < max_reconnection_attempts:
@@ -443,13 +421,7 @@ def run_proxy(cmd):
                 continue
             else:
                 break
-        finally:
-            try:
-                os.close(master)
-            except:
-                pass
     
-    # ریست کردن تنظیمات اتصال
     current_server_config = None
     reconnection_attempts = 0
 
@@ -458,8 +430,7 @@ def main():
     
     proxies = {
         "1": "-D 8080",
-        "2": "-L8080:localhost:8080",
-        "3": "-L8080:172.20.0.111:9050"
+        "2": "-L8080:172.20.0.111:9050"
     }
     
     while True:
@@ -468,7 +439,6 @@ def main():
         console.print(create_header())
         console.print(create_main_menu())
         
-        # نمایش وضعیت اتصال مجدد
         reconnect_status = "[green]ON[/]" if auto_reconnect else "[red]OFF[/]"
         console.print(f"\n[bright_black]Auto-Reconnect: {reconnect_status} | [ [green]Q[/]uit | [green]C[/]lear | [green]A[/]uto-reconnect toggle ][/]")
         
@@ -483,7 +453,7 @@ def main():
                     run_proxy(proxies[sub_choice])
                     console.print("\n[green]Press Enter to return[/]")
                     input()
-                elif sub_choice == 'r' and current_server_config:  # اتصال مجدد دستی
+                elif sub_choice == 'r' and current_server_config:
                     console.print("\n[yellow]Manually reconnecting to last server...[/]")
                     run_proxy(current_server_config)
                     console.print("\n[green]Press Enter to return[/]")
@@ -524,7 +494,7 @@ def main():
         elif choice == '3':  # HELP
             show_help_guide()
             
-        elif choice == 'a':  # تغییر حالت اتصال مجدد خودکار
+        elif choice == 'a':
             auto_reconnect = not auto_reconnect
             status = "enabled" if auto_reconnect else "disabled"
             console.print(f"\n[yellow]Auto-reconnect {status}![/]")
